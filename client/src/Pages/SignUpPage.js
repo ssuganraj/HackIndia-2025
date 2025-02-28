@@ -2,11 +2,17 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import img from "../Assets/logo.png";
 import nodeAPI from "./../NodeAPI"
+import Notification from "../Components/Notification";
+import {useNavigate} from "react-router-dom";
 
 function SignUpPage() {
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 768);
     const [otpVerificationFlag, setOtpVerificationFlag] = useState(false);
     const [phoneError, setPhoneError] = useState("");
+    const [messageFlag, setMessageFlag] = useState(false);
+    const [statusCode, setStatusCode] = useState(401);
+    const [notificationMessage, setNotificationMessage] = useState(null);
+    const navigate = useNavigate();
 
     const itemLeftVariants = {
         hidden: { x: -100, opacity: 0 },
@@ -43,6 +49,12 @@ function SignUpPage() {
         otp: ""
     });
 
+    useEffect(() => {
+        if (notificationMessage) {
+            setMessageFlag(true);
+        }
+    }, [notificationMessage]);
+
     const validatePhoneNumber = (number) => {
         const phonePattern = /^[6-9]\d{9}$/;
         return phonePattern.test(number);
@@ -70,7 +82,8 @@ function SignUpPage() {
             setPhoneError("Enter a valid 10-digit Indian phone number");
             return;
         }
-        console.log(formData);
+        setStatusCode(404);
+        setNotificationMessage("Generating OTP...");
         nodeAPI.post("/auth/otpGenerate",{
             phoneNumber: formData.phoneNumber,
             email: formData.email,
@@ -79,6 +92,19 @@ function SignUpPage() {
         }).then((res) => {
             console.log(res.data.message);
             setOtpVerificationFlag(true);
+        }).catch((error) => {
+            if (error.response) {
+                if (error.response.status === 401) {
+                    setStatusCode(401);
+                    setNotificationMessage("User Already Exists");
+                } else if (error.response.status === 500) {
+                    setStatusCode(500);
+                    setNotificationMessage("Internal Server Issue");
+                }
+            } else {
+                setStatusCode(500);
+                setNotificationMessage("Network Error");
+            }
         })
 
     };
@@ -90,12 +116,28 @@ function SignUpPage() {
             email: formData.email,
             otp:formData.otp
         }).then(res =>{
-            console.log(res.data.message);
+            setStatusCode(200);
+            setNotificationMessage("Otp Verification Successful");
+            navigate("/dashboard");
+        }).catch(error =>{
+            if (error.response) {
+                if (error.response.status === 403) {
+                    setStatusCode(500);
+                    setNotificationMessage("OTP Incorrect");
+                } else if (error.response.status === 500) {
+                    setStatusCode(500);
+                    setNotificationMessage("Internal Server Issue");
+                }
+            } else {
+                setStatusCode(500);
+                setNotificationMessage("Network Error");
+            }
         })
     };
 
     return (
         <div className="w-screen h-screen bg-zinc-100 flex justify-center items-center">
+            {messageFlag && <Notification message={notificationMessage} statusCode={statusCode} />}
             <motion.div className="flex items-center justify-evenly w-full h-full" variants={itemLeftVariants} initial="hidden" whileInView="visible" exit="exit">
                 {isLargeScreen && (
                     <div className="flex w-[45%] h-[90%] items-center justify-center">

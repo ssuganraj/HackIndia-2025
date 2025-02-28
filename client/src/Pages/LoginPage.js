@@ -1,17 +1,29 @@
 import img from "../Assets/logo.png";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import nodeAPI from "../NodeAPI"
-
+import nodeAPI from "../NodeAPI";
+import {useNavigate} from "react-router-dom";
+import Notification from "../Components/Notification";
 
 function LoginPage() {
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 768);
+    const [messageFlag, setMessageFlag] = useState(false);
+    const [statusCode, setStatusCode] = useState(401);
+    const [notificationMessage, setNotificationMessage] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleResize = () => setIsLargeScreen(window.innerWidth > 768);
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
+
+    // Fix: The dependency array should include messageFlag
+    useEffect(() => {
+        if (notificationMessage) {
+            setMessageFlag(true);
+        }
+    }, [notificationMessage]);
 
     const itemLeftVariants = {
         hidden: { x: -100, opacity: 0 },
@@ -48,18 +60,48 @@ function LoginPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        nodeAPI.post("/auth/login",{
+        setStatusCode(404);
+        setNotificationMessage("Checking Credentials...");
+        setMessageFlag(true);
+
+        nodeAPI.post("/auth/login", {
             email: formData.email,
             password: formData.password,
-        }).then((response) => {
-            console.log(response.data.message);
         })
-        // Add your form submission logic here
+            .then((response) => {
+                setStatusCode(200);
+                setNotificationMessage("Credentials Correct");
+                navigate("/dashboard");
+            })
+            .catch((error) => {
+                // Fix: Use error.response to access status code
+                if (error.response) {
+                    if (error.response.status === 404) {
+                        setStatusCode(400);
+                        setNotificationMessage("Email Not Found!!");
+                    } else if (error.response.status === 401) {
+                        setStatusCode(500);
+                        setNotificationMessage("Password Incorrect!");
+                    } else if (error.response.status === 500) {
+                        setStatusCode(500);
+                        setNotificationMessage("Internal Server Issue");
+                    }
+                } else {
+                    setStatusCode(500);
+                    setNotificationMessage("Network Error");
+                }
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    setMessageFlag(false);
+                }, 2000); // Fix: Removed unnecessary array
+            });
     };
-
 
     return (
         <div className="w-screen h-screen bg-zinc-100 flex justify-center items-center">
+            {messageFlag && <Notification message={notificationMessage} statusCode={statusCode} />}
+
             <motion.div
                 className="flex items-center justify-evenly w-full h-full"
                 variants={itemLeftVariants}
@@ -113,7 +155,7 @@ function LoginPage() {
                                 id="password"
                                 name="password"
                                 placeholder="Your Password"
-                                value={formData.password} // ✅ Fixed value here
+                                value={formData.password}
                                 onChange={handleChange}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                                 required
