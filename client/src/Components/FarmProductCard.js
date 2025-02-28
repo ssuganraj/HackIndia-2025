@@ -19,7 +19,7 @@ const FarmProductCard = ({ product }) => {
         image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=870&q=80"
     };
 
-    const { name, description, price, image } = product || defaultProduct;
+    const { name, description, price, img } = product || defaultProduct;
 
     return (
         <div
@@ -31,7 +31,7 @@ const FarmProductCard = ({ product }) => {
             {/* Product Image */}
             <div className="overflow-hidden h-40 sm:h-48 flex items-center justify-center">
                 <img
-                    src={image}
+                    src={img}
                     alt={name}
                     className={`object-cover w-[90%] h-[90%] transition-transform duration-500 rounded ${(isHovered || isTouched) ? 'scale-110' : ''}`}
                 />

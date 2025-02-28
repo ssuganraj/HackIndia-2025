@@ -1,7 +1,15 @@
 import { motion } from "framer-motion";
 import FarmProductCard from "../FarmProductCard";
+import NodeAPI from "../../NodeAPI";
+import { Buffer } from 'buffer';
+import { useEffect, useState } from "react";
+import { Trophy } from "lucide-react";
 
 function ProductSection() {
+
+    useEffect(()=>{
+        getData()
+    },[])
     const itemLeftVariants = {
         hidden: { x: -100, opacity: 0 },
         visible: { x: 0, opacity: 1, transition: { duration: 2, ease: "easeOut" } },
@@ -20,7 +28,7 @@ function ProductSection() {
         exit: { y: 10, opacity: 0, transition: { duration: 0.2 } },
     };
 
-    const products = [
+    const [products,setProducts] = useState([
         { name: "Apple", description: "Farm fresh apples", price: "₹89", image: "https://picsum.photos/300/300" },
         { name: "Banana", description: "Organic ripe bananas", price: "₹49", image: "https://picsum.photos/300/300" },
         { name: "Carrot", description: "Crunchy and sweet carrots", price: "₹39", image: "https://picsum.photos/300/300" },
@@ -30,8 +38,30 @@ function ProductSection() {
         { name: "Mango", description: "Sweet and juicy mangoes", price: "₹99", image: "https://picsum.photos/300/300" },
         { name: "Strawberry", description: "Delicious and fresh strawberries", price: "₹129", image: "https://picsum.photos/300/300" },
         { name: "Cucumber", description: "Hydrating and crisp cucumbers", price: "₹45", image: "https://picsum.photos/300/300" }
-    ];
-
+    ]);
+    
+    async function getData(){
+        try{
+            NodeAPI.get("/user/getAllProducts").then((response) => {
+                const products = []
+                const data = response.data.products;
+                data.forEach(element => {
+                    products.push({
+                        name : element.productName,
+                        description : element.productDescription,
+                        price : element.price,
+                        img : element.image && element.image.data ? 
+                    `data:image/jpeg;base64,${Buffer.from(element.image.data.data).toString("base64")}` : "",
+                    })
+                });
+                setProducts(products)
+            })
+        }catch(e){
+            console.log(e)
+        }
+        
+        
+    }
     return (
         <div className="w-screen min-h-screen bg-zinc-300 p-3">
             <p className="text-center text-3xl text-primary font-bold">Available Products</p>

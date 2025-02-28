@@ -5,11 +5,7 @@ import { Buffer } from 'buffer';
 
 function FarmerDashboard() {
     const [showForm, setShowForm] = useState(false);
-    const [products, setProducts] = useState([
-        { id: 1, name: "Tomatoes", description: "Fresh farm tomatoes", price: "20", img: "", status: "Approved" },
-        { id: 2, name: "Potatoes", description: "Organic potatoes", price: "15", img: "", status: "Waiting For Approval" },
-        { id: 3, name: "Carrots", description: "Crunchy carrots", price: "25", img: "", status: "Approved" },
-    ]);
+    const [products, setProducts] = useState([]);
     const [formData, setFormData] = useState({
         productName: "",
         productDescription: "",
@@ -18,22 +14,26 @@ function FarmerDashboard() {
         status: "Waiting For Approval",
     });
 
-    useEffect(() => {
-        nodeAPI.get("/farmer/getProduct").then((response) => {
+    async function getData(){
+nodeAPI.get("/farmer/getProduct").then((response) => {
             const res = response.data.products;
             const data = res.map(element => ({
                 price: element.price,
                 productDescription: element.productDescription,
                 id: element._id,
-                name: element.name,
+                productName: element.productName,
                 img: element.image && element.image.data ? 
-                    `data:image/jpeg;base64,${Buffer.from(element.image.data.data).toString("base64")}` : ""
+                    `data:image/jpeg;base64,${Buffer.from(element.image.data.data).toString("base64")}` : "",
+                    status : element.status
             }));
             setProducts(data);
-            console.log(data);
+            
         }).catch(error => {
             console.error("Error fetching products:", error);
         });
+    }
+    useEffect(() => {
+        getData();
     }, []);
     
     function handleInputChange(e) {
@@ -76,15 +76,23 @@ function FarmerDashboard() {
                     "Content-Type": "multipart/form-data",
                 },
             });
-            console.log(response);
+           
 
             if (response.status === 201) {
                 console.log("successfull")
                 setShowForm(false);
+                getData();
             }
         }catch (e){
             console.log(e);
         }
+        setFormData({
+            productName: "",
+            productDescription: "",
+            price: "",
+            img: null,
+            status: "Waiting For Approval",
+        })
         setShowForm(false);
 
     }
@@ -121,9 +129,9 @@ function FarmerDashboard() {
                                         {product.img && (
                                             <img src={product.img} alt={product.name} className="w-10 h-10 object-cover rounded-full mr-3" />
                                         )}
-                                        <span className="text-sm font-medium text-gray-900">{product.name}</span>
+                                        <span className="text-sm font-medium text-gray-900">{product.productName}</span>
                                     </td>
-                                    <td className="px-6 py-4 text-sm text-gray-900">{product.description}</td>
+                                    <td className="px-6 py-4 text-sm text-gray-900">{product.productDescription}</td>
                                     <td className="px-6 py-4 text-sm text-gray-900">₹{product.price}</td>
                                     <td className="px-6 py-4">
                                             <span className={`px-2 py-1 text-xs font-semibold rounded-full ${

@@ -8,4 +8,6 @@ const getProductController = require("./../controllers/farmerControllers/getProd
 
 router.post("/addProduct", verifyToken , upload.single("image"),addProductController)
 router.get("/getProduct",verifyToken, getProductController)
+
+
 module.exports = router

@@ -5,6 +5,9 @@ import LandingPage from "./Pages/LandingPage";
 import NavBar from "./Components/NavBar/NavBar";
 import DashBoardController from "./Pages/Dashboard/DashBoardController";
 import Page404 from "./Pages/Page404";
+import AirQualityPage from './Pages/AirQualityPage';
+import AIChatBotPage from './Pages/AIChatBotPage';
+import PaymentGatewayPage from './Pages/PaymentGatewayPage';
 
 function App() {
   return (
@@ -16,6 +19,9 @@ function App() {
               <Route path="/signup" element={< SignUpPage/>}></Route>
               <Route path="/dashboard" element = {<DashBoardController />}></Route>
               <Route path="/page404" element = {<Page404 />} ></Route>
+              <Route path="/airQuality" element= {<AirQualityPage />} ></Route>
+              <Route path="/aiChatBot" element ={<AIChatBotPage />}></Route>
+              <Route path="/payment" element ={< PaymentGatewayPage/>}></Route>
           </Routes>
       </BrowserRouter>
     </div>

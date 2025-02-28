@@ -3,7 +3,6 @@ import nodeAPI from "./../../NodeAPI";
 import {useNavigate} from "react-router-dom";
 import AdminDashBoard from "./AdminDashBoard";
 import FarmerDashboard from "./FarmerDashboard";
-import ExpertDashboard from "./ExpertDashboard";
 import UserDashBoard from "./UserDashBoard";
 
 function DashBoardController() {
@@ -24,11 +23,9 @@ function DashBoardController() {
                     <AdminDashBoard />
                 ) : role === "farmer" ? (
                     <FarmerDashboard />
-                ) : role === "expert" ? (
-                    <ExpertDashboard />
-                ) : (
+                ) : 
                     <UserDashBoard />
-                )
+                
             }
         </>
     )

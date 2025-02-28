@@ -5,7 +5,9 @@ const cookie_parse = require("cookie-parser")
 const verifyToken = require("./../src/middleware/tokenAutherization")
 const farmerRouter = require("./routes/farmerRoutes")
 
+const adminRoute = require("./../src/routes/adminRoutes")
 const authRouter = require("./../src/routes/authRoutes")
+const userRouter = require("./../src/routes/userRoutes")
 
 app.use(cookie_parse())
 app.use(express.json());
@@ -16,6 +18,8 @@ app.use(cors({
 
 app.use("/auth",authRouter)
 app.use("/farmer",farmerRouter)
+app.use("/admin",adminRoute)
+app.use("/user",userRouter)
 
 
 app.get("/getRole",verifyToken,(req,res)=>{

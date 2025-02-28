@@ -21,7 +21,7 @@ const addProductController = async (req, res) => {
         };
 
         const newProduct = new Product({
-            productName,
+            productName : productName,
             productDescription,
             price,
             status: status || "Waiting For Approval",
