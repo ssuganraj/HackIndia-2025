@@ -114,7 +114,50 @@ function FarmerDashboard() {
                 </div>
             </div>
 
-            
+            {showForm && selectedProduct && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center p-4 w-screen">
+                    <div className="bg-white rounded-lg shadow-xl w-[50%]  p-6 relative">
+                        <h3 className="font-semibold text-xl mb-6 text-gray-800">Update Product Status</h3>
+                        <form onSubmit={handleSubmit}>
+                            <div className="mb-4">
+                                <p className="text-xl font-medium text-gray-700">Product Name: <span className="text-2xl font-semibold">{selectedProduct.productName}</span>
+                                </p>
+                                
+                            </div>
+                            <div className="mb-4">
+                                <p className="text-xl font-medium text-gray-700">Description:  
+                                    <span className="text-2xl font-semibold"> {selectedProduct.productDescription}</span>
+                                </p>
+                                
+                            </div>
+                            <div className="mb-4">
+                                <p className="text-xl font-medium text-gray-700">Price: 
+                                    <span className="text-2xl font-semibold"> ₹{selectedProduct.price}
+                                    </span>
+                                </p>
+                                
+                            </div>
+                            {selectedProduct.img && (
+                                <div className="mb-4">
+                                    <img src={selectedProduct.img} alt={selectedProduct.productName} className="w-full h-auto rounded-lg" />
+                                </div>
+                            )}
+                            <div className="mb-4">
+                                <label className="text-sm font-medium text-gray-700">Status</label>
+                                <select value={selectedProduct.status} onChange={handleStatusChange} className="w-full p-2 border border-gray-300 rounded-lg">
+                                    <option value="Waiting For Approval">Waiting For Approval</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Rejected">Rejected</option>
+                                </select>
+                            </div>
+                            <div className="flex justify-between">
+                                <button type="button" onClick={handleCloseForm} className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg">Cancel</button>
+                                <button type="submit" className="px-4 py-2 bg-primary text-white rounded-lg">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -19,7 +19,7 @@ function nodeMailerSendMailer(to, OTP) {
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Welcome to HarvestHub</title>
+    <title>Welcome to AgriNexus</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #2E4A1F;">
     <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -28,7 +28,7 @@ function nodeMailerSendMailer(to, OTP) {
                 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #F5F2E9; border-radius: 16px; border: 1px solid #8B9D77; box-shadow: 0 4px 24px rgba(0,0,0,0.2); margin: 0 auto;">
                     <tr>
                         <td style="padding: 40px 40px; text-align: center;">
-                            <h1 style="color: #3E5A24; font-size: 28px; font-weight: 700; margin: 0;">Welcome to HarvestHub</h1>
+                            <h1 style="color: #3E5A24; font-size: 28px; font-weight: 700; margin: 0;">Welcome to AgriNexus</h1>
                         </td>
                     </tr>
                     <tr>
