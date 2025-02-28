@@ -5,16 +5,18 @@ const jwt = require("jsonwebtoken");
 const loginController = async(req,res)=>{
 
     const {email,password} = req.body;
-    console.log(email)
     
     const userDetails = await userLoginModel.findOne({email});
     if(!userDetails){
         res.status(404).send({message : "not found"});
+        return;
     }
     const result = await bcrypt.compare(password, userDetails.password);
     if(!result){
         res.status(401).send({message : "password incorrect"});
+        return
     }
+
     const token = jwt.sign({email : userDetails.email, role : userDetails.role},process.env.JWT_SCRT,{expiresIn: '1h'});
     res.cookie("jwtToken", token, {
         secure: true,
