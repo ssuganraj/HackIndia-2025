@@ -8,7 +8,7 @@ import NavBar from "../Components/NavBar/NavBar";
 function LandingPage(){
     return (
         <div className="overflow-x-hidden">
-
+            <NavBar />
             <section id="home">
                 <HeroSection />
             </section>

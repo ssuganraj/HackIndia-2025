@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import img from "../Assets/logo.png";
-import nodeAPI from "./../NodeAPI"
+import nodeAPI from "./../NodeAPI";
+import NavBar from "./../Components/LoginSignupNavBar/NavBar"
 import Notification from "../Components/Notification";
 import {useNavigate} from "react-router-dom";
 
@@ -138,6 +139,7 @@ function SignUpPage() {
     return (
         <div className="w-screen h-screen bg-zinc-100 flex justify-center items-center">
             {messageFlag && <Notification message={notificationMessage} statusCode={statusCode} />}
+            <NavBar />
             <motion.div className="flex items-center justify-evenly w-full h-full" variants={itemLeftVariants} initial="hidden" whileInView="visible" exit="exit">
                 {isLargeScreen && (
                     <div className="flex w-[45%] h-[90%] items-center justify-center">

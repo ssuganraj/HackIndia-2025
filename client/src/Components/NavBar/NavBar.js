@@ -77,22 +77,12 @@ function NavBar(){
                     windowWidth > 789
                     &&
                     <motion.div className="flex justify-evenly items-center gap-2  px-4 py-2 bg-opacity-60  rounded-xl w-[10%] z-[99]" variants={itemVariants} whileInView="visible" initial="hidden">
-
-
                             <button className="px-4 py-2 bg-primary text-white rounded-lg transition hover:bg-[#234722] hover:-rotate-6 hover:scale-110" onClick={()=> navigate("/login")}>
                                 Login
                             </button>
-
-
-
-
-
                             <button className="px-4 py-2 bg-secondary text-white rounded-lg transition hover:bg-[#5A873E] hover:scale-110 hover:rotate-6" onClick={()=> navigate("/signup")}>
                                 SignUp
                             </button>
-
-
-
                     </motion.div>
                 }
                 {
@@ -101,7 +91,6 @@ function NavBar(){
                         <GiHamburgerMenu />
                     </div>
                 }
-
             </div>
         </>
 

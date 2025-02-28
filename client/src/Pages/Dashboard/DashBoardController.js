@@ -12,6 +12,7 @@ function DashBoardController() {
     useEffect(()=>{
         nodeAPI.get("/getRole").then((response) => {
             setRole(response.data.role)
+            console.log(response.data.role);
         }).catch((error) => {
             navigate("/page404")
         })
@@ -21,7 +22,7 @@ function DashBoardController() {
             {
                 role === "admin" ? (
                     <AdminDashBoard />
-                ) : role === "framer" ? (
+                ) : role === "farmer" ? (
                     <FarmerDashboard />
                 ) : role === "expert" ? (
                     <ExpertDashboard />

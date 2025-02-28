@@ -2,6 +2,7 @@ import img from "../Assets/logo.png";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import nodeAPI from "../NodeAPI";
+import NavBar from "./../Components/LoginSignupNavBar/NavBar"
 import {useNavigate} from "react-router-dom";
 import Notification from "../Components/Notification";
 
@@ -101,7 +102,7 @@ function LoginPage() {
     return (
         <div className="w-screen h-screen bg-zinc-100 flex justify-center items-center">
             {messageFlag && <Notification message={notificationMessage} statusCode={statusCode} />}
-
+            <NavBar />
             <motion.div
                 className="flex items-center justify-evenly w-full h-full"
                 variants={itemLeftVariants}

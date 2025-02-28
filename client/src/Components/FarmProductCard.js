@@ -45,11 +45,9 @@ const FarmProductCard = ({ product }) => {
                 <p className="mb-3 sm:mb-4 text-xs sm:text-sm text-gray-600">{description}</p>
 
                 {/* Price and Add to Cart */}
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                    <span className="text-base sm:text-lg font-semibold text-secondary">{price}</span>
-                    <button className="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-secondary transition-all bg-transparent border-2 border-primary rounded-lg w-full sm:w-auto focus:ring-2 hover:bg-primary hover:text-white z-10">
-                        Add to Cart
-                    </button>
+                <div className="flex flex-col justify-center items-center">
+                    <span className="text-base sm:text-lg font-semibold text-secondary text-center">{price}</span>
+
                 </div>
             </div>
         </div>
