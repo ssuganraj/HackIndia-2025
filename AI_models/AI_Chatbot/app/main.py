@@ -1,9 +1,13 @@
+# app/main.py
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
-import speech_recognition as sr
-import pyttsx3
-from core.rag import AgriRAG
-from core.model import AgriModel, PromptBuilder
+from core.rag import AgriKnowledgeBase
+from core.model import AgriChatbot
+import pyttsx3  # Import pyttsx3 for text-to-speech
 
 app = FastAPI()
 
@@ -16,45 +20,46 @@ app.add_middleware(
 )
 
 # Initialize components
-rag = AgriRAG()
-model = AgriModel()
-engine = pyttsx3.init()
+rag = AgriKnowledgeBase()
+chatbot = AgriChatbot()
+engine = pyttsx3.init()  # Initialize the TTS engine
 
 @app.post("/query")
 async def handle_query(query: str):
     """Handles text-based queries."""
     context_docs = rag.retrieve_context(query)
     context = "\n".join([doc.page_content for doc in context_docs])
-    messages = PromptBuilder.build_agronomy_prompt(query, context)
-    response = model.generate_response(messages)
+    response = chatbot.generate_response(query, context)
     return {"response": response}
 
 @app.websocket("/voice-chat")
 async def websocket_voice(websocket: WebSocket):
     """Handles real-time voice chat using WebSockets."""
     await websocket.accept()
-    recognizer = sr.Recognizer()
-    with sr.Microphone() as source:
+    
+    try:
         while True:
-            try:
-                await websocket.send_text("Listening...")
-                audio = recognizer.listen(source)
-                query = recognizer.recognize_google(audio)
-                await websocket.send_text(f"User: {query}")
+            # Receive the query from the client
+            query = await websocket.receive_text()
+            print(f"Received query: {query}")
 
-                # Process the query
-                context_docs = rag.retrieve_context(query)
-                context = "\n".join([doc.page_content for doc in context_docs])
-                messages = PromptBuilder.build_agronomy_prompt(query, context)
-                response = model.generate_response(messages)
+            # Process the query
+            context_docs = rag.retrieve_context(query)
+            context = "\n".join([doc.page_content for doc in context_docs])
+            response = chatbot.generate_response(query, context)
 
-                # Speak the response in real-time
-                engine.say(response)
-                engine.runAndWait()
+            # Send the response back to the client
+            await websocket.send_text(response)
 
-                await websocket.send_text(f"Bot: {response}")
-            except Exception as e:
-                await websocket.send_text(f"Error: {str(e)}")
+            # Speak the response using TTS
+            engine.say(response)  # Add the response to the TTS queue
+            engine.runAndWait()   # Speak the response
+
+    except Exception as e:
+        print(f"Error in WebSocket handler: {e}")
+        await websocket.send_text(f"Error: {str(e)}")
+    finally:
+        await websocket.close()
 
 if __name__ == "__main__":
     import uvicorn
