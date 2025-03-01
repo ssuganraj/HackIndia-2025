@@ -139,7 +139,7 @@ function FarmerDashboard() {
                             </div>
                             {selectedProduct.img && (
                                 <div className="mb-4">
-                                    <img src={selectedProduct.img} alt={selectedProduct.productName} className="w-full h-auto rounded-lg" />
+                                    <img src={selectedProduct.img} alt={selectedProduct.productName} className="w-[200] h-auto rounded-lg" />
                                 </div>
                             )}
                             <div className="mb-4">
