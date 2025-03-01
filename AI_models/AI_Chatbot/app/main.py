@@ -7,7 +7,7 @@ from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from core.rag import AgriKnowledgeBase
 from core.model import AgriChatbot
-import pyttsx3  # Import pyttsx3 for text-to-speech
+import pyttsx3  #text-to-speech
 
 app = FastAPI()
 
@@ -28,6 +28,7 @@ engine = pyttsx3.init()  # Initialize the TTS engine
 async def handle_query(query: str):
     """Handles text-based queries."""
     context_docs = rag.retrieve_context(query)
+    print(query)
     context = "\n".join([doc.page_content for doc in context_docs])
     response = chatbot.generate_response(query, context)
     return {"response": response}
