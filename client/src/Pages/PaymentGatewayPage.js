@@ -7,13 +7,12 @@ function PaymentGatewayPage() {
         "React.js - Frontend Framework",
         "Node.js - Backend Runtime",
         "Express.js - Backend Framework",
-        "MongoDB / PostgreSQL - Database",
-        "Stripe / Razorpay / PayPal - Payment API",
-        "JWT / OAuth - Authentication",
+        "MongoDB  - Database",
+        "Stripe - Payment API",
+        "Nodemailer - Email Notifications",
         "Axios / Fetch API - HTTP Requests",
         "Webhooks - Event Handling",
         "Tailwind CSS - Styling",
-        "Redux / Context API - State Management"
     ];
 
     return (
