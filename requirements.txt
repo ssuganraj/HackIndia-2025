@@ -1,7 +1,5 @@
 fastapi
 uvicorn
-pydub
-speechrecognition
 gtts
 transformers
 sentencepiece
