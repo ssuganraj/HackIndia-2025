@@ -2,7 +2,6 @@
 
 ## 🌱 Revolutionizing Agriculture for a Sustainable Future
 
-### 🔗 Project Repository: [HackIndia-Spark-1-2025-Technical-Droids](https://github.com/ssuganraj/HackIndia-Spark-1-2025-Technical-Droids)
 
 ---
 
@@ -62,6 +61,4 @@ Technical Droids' project bridges the gap between farmers and technology, **empo
 📌 **Developed by:** Team **Technical Droids** – St. Joseph’s Institute of Technology, Chennai  
 💡 **Hackathon:** HackIndia-Spark-1-2025  
 👨‍💻 **Team Leader:** Sivasabari P  
-📩 **Contact:** [Your Email or GitHub Discussions]  
 
-🔗 **GitHub Repo:** [HackIndia-Spark-1-2025-Technical-Droids](https://github.com/ssuganraj/HackIndia-Spark-1-2025-Technical-Droids)
