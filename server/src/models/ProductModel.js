@@ -9,7 +9,7 @@ const productSchema = new mongoose.Schema({
         data: Buffer,
         contentType: String,
     },
-    email: { type: String, required: true }, // Store user email
+    email: { type: String, required: true }, 
 }, { timestamps: true });
 
 module.exports = mongoose.model("Product", productSchema);

@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import nodeAPI  from "../../NodeAPI";
 import NavBar from "./../../Components/FarmerNavBar/NavBar";
+import { Buffer } from 'buffer';
 
 function FarmerDashboard() {
     const [showForm, setShowForm] = useState(false);
@@ -17,6 +18,24 @@ function FarmerDashboard() {
         status: "Waiting For Approval",
     });
 
+    useEffect(() => {
+        nodeAPI.get("/farmer/getProduct").then((response) => {
+            const res = response.data.products;
+            const data = res.map(element => ({
+                price: element.price,
+                productDescription: element.productDescription,
+                id: element._id,
+                name: element.name,
+                img: element.image && element.image.data ? 
+                    `data:image/jpeg;base64,${Buffer.from(element.image.data.data).toString("base64")}` : ""
+            }));
+            setProducts(data);
+            console.log(data);
+        }).catch(error => {
+            console.error("Error fetching products:", error);
+        });
+    }, []);
+    
     function handleInputChange(e) {
         const { id, value } = e.target;
         setFormData({
@@ -30,7 +49,7 @@ function FarmerDashboard() {
         if (file) {
             setFormData({
                 ...formData,
-                img: URL.createObjectURL(file),
+                img: file,
             });
         }
     }
@@ -49,7 +68,7 @@ function FarmerDashboard() {
             formDataToSend.append("productDescription", formData.productDescription);
             formDataToSend.append("price", formData.price);
             formDataToSend.append("status", "Waiting For Approval");
-            formDataToSend.append("image", formData.image); // File upload
+            formDataToSend.append("image", formData.img); // File upload
 
             // Send request to backend
             const response = await nodeAPI.post("/farmer/addProduct", formDataToSend, {
